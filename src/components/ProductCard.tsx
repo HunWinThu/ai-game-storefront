@@ -64,11 +64,11 @@ const ProductCard = ({
           
           <div className="flex items-baseline gap-2 mb-3">
             <span className="text-lg font-bold text-foreground">
-              ${price}
+              ฿{price}
             </span>
             {originalPrice && (
               <span className="text-sm text-muted-foreground line-through">
-                ${originalPrice}
+                ฿{originalPrice}
               </span>
             )}
           </div>

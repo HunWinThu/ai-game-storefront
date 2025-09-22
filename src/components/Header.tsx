@@ -7,7 +7,7 @@ const Header = () => {
     <header className="bg-background border-b border-border sticky top-0 z-50">
       {/* Top banner */}
       <div className="bg-primary text-primary-foreground py-2 px-4 text-center text-sm">
-        Free worldwide shipping on orders over $100 • Premium Myanmar foods for export
+        Free worldwide shipping on orders over ฿3,500 • Premium Myanmar foods for export
       </div>
       
       {/* Main header */}
@@ -16,11 +16,11 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <div className="bg-primary text-primary-foreground px-3 py-2 rounded font-bold text-xl">
-              MF
+              TTL
             </div>
             <div>
-              <h1 className="font-bold text-xl text-foreground">Myanmar Foods</h1>
-              <p className="text-xs text-muted-foreground">Export Quality</p>
+              <h1 className="font-bold text-xl text-foreground">Tan Tan Lay</h1>
+              <p className="text-xs text-muted-foreground">Myanmar Foods</p>
             </div>
           </div>
 
