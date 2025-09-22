@@ -54,12 +54,13 @@ const Header = () => {
 
         {/* Navigation */}
         <nav className="hidden md:flex items-center space-x-8 mt-4 pt-4 border-t border-border">
-          <a href="#" className="text-foreground hover:text-primary font-medium">Home</a>
+          <a href="/" className="text-foreground hover:text-primary font-medium">Home</a>
           <a href="#" className="text-muted-foreground hover:text-primary">All Products</a>
           <a href="#" className="text-muted-foreground hover:text-primary">Snacks</a>
           <a href="#" className="text-muted-foreground hover:text-primary">Spices</a>
           <a href="#" className="text-muted-foreground hover:text-primary">Dried Fruits</a>
           <a href="#" className="text-muted-foreground hover:text-primary">Gift Sets</a>
+          <a href="/admin" className="text-muted-foreground hover:text-primary">Admin</a>
           <a href="#" className="text-muted-foreground hover:text-primary">About</a>
           <a href="#" className="text-muted-foreground hover:text-primary">Contact</a>
         </nav>

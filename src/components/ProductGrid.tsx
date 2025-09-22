@@ -1,70 +1,124 @@
+import { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { supabase } from "@/lib/supabase";
+import { Product } from "@/types/product";
 
 const ProductGrid = () => {
-  // Sample Myanmar food products
-  const products = [
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching products:', error);
+        // Fall back to sample products if database is not set up
+        setProducts(sampleProducts);
+      } else {
+        setProducts(data || []);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      // Fall back to sample products
+      setProducts(sampleProducts);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Sample data as fallback
+  const sampleProducts: Product[] = [
     {
       id: "1",
       name: "Traditional Myanmar Tea Leaf Salad Mix",
-      price: 24.99,
-      originalPrice: 29.99,
+      price: 899,
+      original_price: 1079,
       category: "Traditional Mix",
-      isPopular: true,
-      inStock: true
+      is_popular: true,
+      in_stock: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     },
     {
       id: "2", 
       name: "Premium Thanaka Powder",
-      price: 18.99,
+      price: 679,
       category: "Beauty & Wellness",
-      isPopular: true,
-      inStock: true
+      is_popular: true,
+      in_stock: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     },
     {
       id: "3",
       name: "Myanmar Fish Sauce (Premium)",
-      price: 12.99,
+      price: 459,
       category: "Sauces & Condiments",
-      inStock: true
+      in_stock: true,
+      is_popular: false,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     },
     {
       id: "4",
       name: "Dried Mango Strips",
-      price: 15.99,
-      originalPrice: 18.99,
+      price: 569,
+      original_price: 679,
       category: "Dried Fruits",
-      inStock: true
+      in_stock: true,
+      is_popular: false,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     },
     {
       id: "5",
       name: "Myanmar Curry Spice Set",
-      price: 32.99,
+      price: 1179,
       category: "Spice Sets",
-      isPopular: true,
-      inStock: true
+      is_popular: true,
+      in_stock: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     },
     {
       id: "6",
       name: "Traditional Palm Sugar Blocks",
-      price: 9.99,
+      price: 359,
       category: "Sweeteners",
-      inStock: false
+      in_stock: false,
+      is_popular: false,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     },
     {
       id: "7",
       name: "Myanmar Rice Crackers",
-      price: 8.99,
+      price: 319,
       category: "Snacks",
-      inStock: true
+      in_stock: true,
+      is_popular: false,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     },
     {
       id: "8",
       name: "Fermented Shrimp Paste",
-      price: 14.99,
+      price: 539,
       category: "Sauces & Condiments",
-      inStock: true
+      in_stock: true,
+      is_popular: false,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     }
   ];
 
@@ -92,11 +146,34 @@ const ProductGrid = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products.slice(0, 4).map((product) => (
-              <ProductCard key={product.id} {...product} />
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[1,2,3,4].map(i => (
+                <div key={i} className="bg-card rounded-lg p-4 animate-pulse">
+                  <div className="bg-muted h-48 rounded mb-4"></div>
+                  <div className="bg-muted h-4 rounded mb-2"></div>
+                  <div className="bg-muted h-3 rounded mb-2 w-2/3"></div>
+                  <div className="bg-muted h-4 rounded w-1/2"></div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {products.filter(p => p.is_popular).slice(0, 4).map((product) => (
+                <ProductCard 
+                  key={product.id} 
+                  id={product.id}
+                  name={product.name}
+                  price={product.price}
+                  originalPrice={product.original_price}
+                  category={product.category}
+                  image={product.image_url}
+                  isPopular={product.is_popular}
+                  inStock={product.in_stock}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Categories Section */}
@@ -137,11 +214,34 @@ const ProductGrid = () => {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products.map((product) => (
-              <ProductCard key={product.id} {...product} />
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[1,2,3,4,5,6,7,8].map(i => (
+                <div key={i} className="bg-card rounded-lg p-4 animate-pulse">
+                  <div className="bg-muted h-48 rounded mb-4"></div>
+                  <div className="bg-muted h-4 rounded mb-2"></div>
+                  <div className="bg-muted h-3 rounded mb-2 w-2/3"></div>
+                  <div className="bg-muted h-4 rounded w-1/2"></div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {products.map((product) => (
+                <ProductCard 
+                  key={product.id} 
+                  id={product.id}
+                  name={product.name}
+                  price={product.price}
+                  originalPrice={product.original_price}
+                  category={product.category}
+                  image={product.image_url}
+                  isPopular={product.is_popular}
+                  inStock={product.in_stock}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>
