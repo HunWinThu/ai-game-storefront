@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Product } from "@/types/product";
+import { useCart } from "@/hooks/useCart";
 
 const ProductGrid = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     fetchProducts();
@@ -170,6 +172,7 @@ const ProductGrid = () => {
                   image={product.image_url}
                   isPopular={product.is_popular}
                   inStock={product.in_stock}
+                  onAddToCart={addToCart}
                 />
               ))}
             </div>
@@ -238,6 +241,7 @@ const ProductGrid = () => {
                   image={product.image_url}
                   isPopular={product.is_popular}
                   inStock={product.in_stock}
+                  onAddToCart={addToCart}
                 />
               ))}
             </div>

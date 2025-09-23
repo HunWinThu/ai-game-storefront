@@ -12,16 +12,19 @@ interface ProductCardProps {
   image?: string;
   isPopular?: boolean;
   inStock?: boolean;
+  onAddToCart?: (product: { id: string; name: string; price: number; image?: string }) => void;
 }
 
 const ProductCard = ({ 
+  id,
   name, 
   price, 
   originalPrice, 
   category, 
   image, 
   isPopular = false,
-  inStock = true 
+  inStock = true,
+  onAddToCart
 }: ProductCardProps) => {
   return (
     <Card className="group hover:shadow-lg transition-all duration-300 relative overflow-hidden">
@@ -78,6 +81,7 @@ const ProductCard = ({
           className="w-full group/btn" 
           disabled={!inStock}
           variant={inStock ? "default" : "secondary"}
+          onClick={() => inStock && onAddToCart?.({ id, name, price, image })}
         >
           {inStock ? (
             <>
