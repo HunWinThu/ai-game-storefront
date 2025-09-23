@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, Heart } from "lucide-react";
+import { ShoppingCart, Heart, Plus, Minus } from "lucide-react";
 
 interface ProductCardProps {
   id: string;
@@ -12,7 +12,9 @@ interface ProductCardProps {
   image?: string;
   isPopular?: boolean;
   inStock?: boolean;
+  currentQuantity?: number;
   onAddToCart?: (product: { id: string; name: string; price: number; image?: string }) => void;
+  onUpdateQuantity?: (productId: string, quantity: number) => void;
 }
 
 const ProductCard = ({ 
@@ -24,7 +26,9 @@ const ProductCard = ({
   image, 
   isPopular = false,
   inStock = true,
-  onAddToCart
+  currentQuantity = 0,
+  onAddToCart,
+  onUpdateQuantity
 }: ProductCardProps) => {
   return (
     <Card className="group hover:shadow-lg transition-all duration-300 relative overflow-hidden">
@@ -77,21 +81,49 @@ const ProductCard = ({
           </div>
         </div>
 
-        <Button 
-          className="w-full group/btn" 
-          disabled={!inStock}
-          variant={inStock ? "default" : "secondary"}
-          onClick={() => inStock && onAddToCart?.({ id, name, price, image })}
-        >
-          {inStock ? (
-            <>
-              <ShoppingCart className="mr-2 h-4 w-4 group-hover/btn:animate-bounce" />
-              Add to Cart
-            </>
-          ) : (
-            "Out of Stock"
-          )}
-        </Button>
+        {currentQuantity > 0 ? (
+          <div className="w-full flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              size="icon"
+              className="h-9 w-9"
+              onClick={() => onUpdateQuantity?.(id, currentQuantity - 1)}
+              disabled={!inStock}
+            >
+              <Minus className="h-4 w-4" />
+            </Button>
+            
+            <div className="flex-1 text-center py-2 bg-muted rounded-md font-medium">
+              {currentQuantity}
+            </div>
+            
+            <Button 
+              variant="outline" 
+              size="icon"
+              className="h-9 w-9"
+              onClick={() => onUpdateQuantity?.(id, currentQuantity + 1)}
+              disabled={!inStock}
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
+          </div>
+        ) : (
+          <Button 
+            className="w-full group/btn" 
+            disabled={!inStock}
+            variant={inStock ? "default" : "secondary"}
+            onClick={() => inStock && onAddToCart?.({ id, name, price, image })}
+          >
+            {inStock ? (
+              <>
+                <ShoppingCart className="mr-2 h-4 w-4 group-hover/btn:animate-bounce" />
+                Add to Cart
+              </>
+            ) : (
+              "Out of Stock"
+            )}
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );

@@ -9,7 +9,7 @@ import { useCart } from "@/hooks/useCart";
 const ProductGrid = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { addToCart } = useCart();
+  const { addToCart, updateQuantity, cartItems } = useCart();
 
   useEffect(() => {
     fetchProducts();
@@ -162,8 +162,8 @@ const ProductGrid = () => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {products.filter(p => p.is_popular).slice(0, 4).map((product) => (
-                <ProductCard 
-                  key={product.id} 
+                <ProductCard
+                  key={product.id}
                   id={product.id}
                   name={product.name}
                   price={product.price}
@@ -172,7 +172,9 @@ const ProductGrid = () => {
                   image={product.image_url}
                   isPopular={product.is_popular}
                   inStock={product.in_stock}
+                  currentQuantity={cartItems.find(item => item.id === product.id)?.quantity || 0}
                   onAddToCart={addToCart}
+                  onUpdateQuantity={updateQuantity}
                 />
               ))}
             </div>
@@ -231,8 +233,8 @@ const ProductGrid = () => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {products.map((product) => (
-                <ProductCard 
-                  key={product.id} 
+                <ProductCard
+                  key={product.id}
                   id={product.id}
                   name={product.name}
                   price={product.price}
@@ -241,7 +243,9 @@ const ProductGrid = () => {
                   image={product.image_url}
                   isPopular={product.is_popular}
                   inStock={product.in_stock}
+                  currentQuantity={cartItems.find(item => item.id === product.id)?.quantity || 0}
                   onAddToCart={addToCart}
+                  onUpdateQuantity={updateQuantity}
                 />
               ))}
             </div>
