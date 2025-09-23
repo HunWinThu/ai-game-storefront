@@ -217,8 +217,11 @@ const Admin = () => {
                     id="price"
                     type="number"
                     step="0.01"
-                    value={form.price}
-                    onChange={(e) => setForm({ ...form, price: parseFloat(e.target.value) })}
+                    value={form.price || ''}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setForm({ ...form, price: value === '' ? 0 : parseFloat(value) || 0 });
+                    }}
                     required
                   />
                 </div>
@@ -229,7 +232,10 @@ const Admin = () => {
                     type="number"
                     step="0.01"
                     value={form.original_price || ''}
-                    onChange={(e) => setForm({ ...form, original_price: e.target.value ? parseFloat(e.target.value) : undefined })}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setForm({ ...form, original_price: value === '' ? undefined : parseFloat(value) || undefined });
+                    }}
                   />
                 </div>
               </div>
